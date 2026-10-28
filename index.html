@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Estante Dela</title>
+<meta name="description" content="Biblioteca de ebooks para cada fase da vida da mulher: gestação, maternidade, autoestima, receitas, carreira e muito mais.">
+<meta property="og:title" content="Estante Dela">
+<meta property="og:description" content="Um ebook para cada fase da sua vida. Gestação, maternidade, autoestima, receitas, carreira e muito mais.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#B3306A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23B3306A'/%3E%3Cpath d='M9 8h4v16H9zM14.5 8h4v16h-4zM20 9.2l3.8-1 3.6 14.6-3.8 1z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+html{color-scheme:light}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
+/* Sempre no tema claro (rosa). Layout: uma biblioteca. Barra fixa com busca, prateleiras por categoria que rolam de lado, ficha do livro em painel. */
+:root{
+  --bg:#ECB9CB; --paper:#FFFFFF; --ink:#341222; --muted:#663650; --line:#D898B0;
+  --accent:#B32A62; --accent-ink:#FFFFFF; --accent-soft:#F6D3DF; --stamp:#86204B;
+  --blush:#E5A6BD; --blush-2:#DB93AE; --deep:#851F4C; color-scheme:light;
+  --shadow:0 1px 2px rgba(120,30,70,.06),0 8px 24px -12px rgba(120,30,70,.22);
+  --f-display:"Cormorant Garamond","Cormorant",Georgia,"Times New Roman",serif;
+  --f-body:"Nunito Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+  --gutter-l:max(16px,env(safe-area-inset-left,0px));
+  --gutter-r:max(16px,env(safe-area-inset-right,0px));
+}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--f-body);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1240px;margin:0 auto;padding-left:var(--gutter-l);padding-right:var(--gutter-r)}
+
+/* Barra */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:16px;padding-block:12px}
+.logo{font:400 30px/1 var(--f-display);letter-spacing:.01em;text-decoration:none;white-space:nowrap}
+.logo em{font-style:italic;color:var(--accent)}
+.socials{display:flex;gap:4px;margin-left:auto}
+.socials a{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;color:var(--muted);text-decoration:none;transition:color .15s,background .15s}
+.socials a:hover{color:var(--accent);background:var(--accent-soft)}
+.socials a[aria-disabled="true"]{opacity:.45;pointer-events:none}
+.socials svg{width:18px;height:18px}
+@media (max-width:720px){.logo{font-size:21px}.bar .socials a{width:34px}}
+
+/* Abertura */
+.hero{padding-block:48px 40px;background:linear-gradient(180deg,var(--bg) 0%,var(--blush) 100%)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:40px;align-items:center}
+.eyebrow{font:500 12px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--stamp)}
+.hero h1{font:300 clamp(44px,6.2vw,80px)/1 var(--f-display);letter-spacing:-.01em;margin:14px 0 16px;text-wrap:balance}
+.hero h1 em{font-style:italic;font-weight:400;color:var(--accent)}
+.hero p{font-size:18px;color:var(--muted);max-width:52ch;margin:0 0 24px}
+.perks{display:flex;flex-wrap:wrap;gap:8px 20px;padding:0;margin:0;list-style:none;font-size:14px;font-weight:500}
+.perks li{display:flex;align-items:center;gap:8px}
+.perks li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.fan{position:relative;aspect-ratio:16/12.5;max-width:100%}
+.fan img{position:absolute;width:60%;aspect-ratio:16/9;object-fit:cover;border-radius:10px;box-shadow:var(--shadow);border:1px solid var(--line);background:var(--paper)}
+.fan img:nth-child(1){left:0;top:0;rotate:-7deg}
+.fan img:nth-child(2){right:0;top:3%;rotate:6deg}
+.fan img:nth-child(3){left:4%;top:33%;rotate:-3deg}
+.fan img:nth-child(4){right:3%;top:37%;rotate:3deg}
+.fan img:nth-child(5){left:20%;bottom:0;rotate:-1deg}
+@media (max-width:820px){.hero{padding-block:28px 12px}.hero .wrap{grid-template-columns:1fr;gap:28px}.fan{max-width:440px;width:100%}}
+
+/* Categorias */
+#main{scroll-margin-top:calc(env(safe-area-inset-top,0px) + var(--bar-h,67px) + 8px)}
+.cats{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 24px}
+.hero .wrap>*{min-width:0}
+@media (max-width:820px){.cats{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}}
+.cats::-webkit-scrollbar{display:none}
+.chip{flex:none;display:flex;align-items:center;gap:8px;height:36px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:var(--paper);cursor:pointer;font-size:14px;font-weight:500;white-space:nowrap;transition:background .15s,border-color .15s}
+.chip:hover{border-color:var(--accent)}
+.chip small{font:500 11px var(--f-mono);color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chip[aria-pressed="true"] small{color:inherit;opacity:.7}
+.chip.adult{border-style:dashed}
+
+/* Prateleiras */
+main{padding-block:12px 64px}
+.shelf{padding-top:36px}
+.shelf-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:16px}
+.shelf-head h2{font:400 clamp(30px,3.6vw,40px)/1.05 var(--f-display);margin:0;color:var(--deep)}
+.shelf-head p{margin:4px 0 0;color:var(--muted);font-size:15px}
+.see{flex:none;background:var(--accent-soft);border:0;padding:6px 14px;border-radius:999px;cursor:pointer;font-weight:600;font-size:14px;color:var(--accent);white-space:nowrap}
+.see:hover{text-decoration:underline}
+.row{display:grid;grid-auto-flow:column;grid-auto-columns:clamp(220px,24vw,270px);gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.row>*{scroll-snap-align:start}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:28px 20px;padding-top:28px}
+.results-head{padding-top:32px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.results-head h2{font:400 clamp(34px,4vw,48px)/1.05 var(--f-display);color:var(--deep);margin:0}
+.results-head span{color:var(--muted)}
+
+/* Card */
+.card{display:flex;flex-direction:column;gap:10px;text-align:left;text-decoration:none;color:inherit;cursor:pointer;min-width:0}
+.cover{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:var(--blush-2);border:1px solid var(--line);box-shadow:var(--shadow);transition:translate .2s,box-shadow .2s}
+.cover img{width:100%;height:100%;object-fit:cover;display:block}
+.card:hover .cover{translate:0 -3px}
+.tag18{position:absolute;top:8px;left:8px;font:600 11px var(--f-mono);background:var(--ink);color:var(--bg);padding:3px 7px;border-radius:4px}
+.meta{font:500 11px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;gap:10px}
+.card h3{font:700 16px/1.3 var(--f-body);margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;text-wrap:pretty}
+.empty{padding:48px 0;color:var(--muted);font-size:17px}
+
+/* Ficha (painel) */
+.sheet-bg{position:fixed;inset:0;z-index:40;background:rgba(40,10,25,.55);display:grid;place-items:center;padding:16px;padding-left:var(--gutter-l);padding-right:var(--gutter-r);padding-top:max(16px,env(safe-area-inset-top,0px));padding-bottom:max(16px,env(safe-area-inset-bottom,0px))}
+.sheet{position:relative;width:min(880px,100%);max-height:100%;overflow:auto;background:var(--paper);border-radius:16px;box-shadow:0 30px 80px -20px rgba(0,0,0,.5);display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+.sheet .big{background:var(--accent-soft);display:flex;align-items:center;padding:24px}
+.sheet .big img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px;box-shadow:var(--shadow)}
+.sheet .info{padding:32px 28px 28px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.sheet h2{font:400 clamp(28px,3.4vw,36px)/1.1 var(--f-display);margin:0;text-wrap:balance}
+.sheet p{margin:0;color:var(--muted);font-size:16px}
+.ficha{margin:4px 0 0;display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:14px;padding:14px 0;border-block:1px dashed var(--line)}
+.ficha dt{font:500 11px/1.9 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ficha dd{margin:0;font-weight:500}
+.buy{display:flex;align-items:center;justify-content:center;gap:10px;height:52px;border-radius:12px;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:700;font-size:16px;border:0;cursor:pointer;margin-top:auto}
+.buy:hover{filter:brightness(1.06)}
+.buy[aria-disabled="true"]{background:var(--line);color:var(--muted);cursor:default;filter:none}
+.safe{font-size:13px;color:var(--muted);text-align:center}
+.close{position:absolute;top:10px;right:10px;width:38px;height:38px;border-radius:50%;border:0;background:var(--paper);box-shadow:var(--shadow);cursor:pointer;font-size:20px;line-height:1;display:grid;place-items:center;z-index:2}
+@media (max-width:720px){.sheet{grid-template-columns:1fr}.sheet .big{padding:16px}.sheet .info{padding:20px}}
+
+/* Aviso +18 */
+.gate{background:var(--paper);border-radius:16px;padding:32px 28px;width:min(440px,100%);text-align:center;display:flex;flex-direction:column;gap:14px;box-shadow:0 30px 80px -20px rgba(0,0,0,.5)}
+.gate b{font:italic 400 48px/1 var(--f-display);color:var(--accent)}
+.gate h2{font:400 32px/1.1 var(--f-display);margin:0}
+.gate p{margin:0;color:var(--muted)}
+.gate .btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.ghost{height:46px;padding:0 18px;border-radius:12px;border:1px solid var(--line);background:none;cursor:pointer;font-weight:600}
+.gate .buy{height:46px;padding:0 18px;margin:0}
+
+/* Combos */
+.offers{padding-block:44px 48px}
+.offers-head{max-width:60ch;margin-bottom:24px}
+.offers-head h2{font:400 clamp(34px,4.4vw,52px)/1.02 var(--f-display);margin:10px 0 8px;color:var(--deep);text-wrap:balance}
+.offers-head p{margin:0;color:var(--muted);font-size:17px}
+.offer-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.offer{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:24px 22px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow);min-width:0}
+.offer.total{background:var(--deep);border-color:var(--deep);color:#fff}
+.offer .kind{font:500 11px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--stamp)}
+.offer.total .kind{color:#F8C9DA}
+.offer h3{font:400 30px/1.05 var(--f-display);margin:0}
+.offer .val{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:4px}
+.offer .val b{font:700 34px/1 var(--f-body);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.offer .val small{font-size:15px;font-weight:600;opacity:.8}
+.offer .val s{color:var(--muted);font-size:15px}
+.offer.total .val s{color:#F3BCD0}
+.offer .note{margin:0;font-size:15px;color:var(--muted)}
+.offer.total .note{color:#F8D5E2}
+.offer .save{align-self:flex-start;font:600 12px/1 var(--f-body);background:var(--accent-soft);color:var(--deep);padding:6px 10px;border-radius:999px}
+.offer .buy{margin-top:auto;height:48px;text-decoration:none}
+.offer.total .buy{background:#fff;color:var(--deep)}
+.offer.total .buy[aria-disabled="true"]{background:rgba(255,255,255,.18);color:#F8D5E2}
+@media (max-width:860px){.offer-grid{grid-template-columns:1fr}}
+.card-price{font:700 15px/1 var(--f-body);color:var(--deep);font-variant-numeric:tabular-nums}
+.price-line{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.price-line b{font:700 30px/1 var(--f-body);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.price-line span{font-size:14px;color:var(--muted)}
+.pick{position:absolute;top:8px;right:8px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.95);color:var(--deep);font:700 20px/1 var(--f-body);box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.card.picked .pick{background:var(--accent);color:#fff}
+.card.picked .cover{outline:3px solid var(--accent);outline-offset:3px}
+.combo-bar{position:fixed;left:0;right:0;bottom:0;z-index:25;background:var(--ink);color:#fff;padding-top:12px;padding-bottom:max(12px,env(safe-area-inset-bottom,0px));box-shadow:0 -10px 30px -10px rgba(0,0,0,.35)}
+.combo-bar .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.combo-bar .what{flex:1;min-width:180px}
+.combo-bar .what b{display:block;font-size:16px}
+.combo-bar .what span{font-size:14px;opacity:.8}
+.dots{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+.dots i{width:14px;height:6px;border-radius:3px;background:rgba(255,255,255,.25)}
+.dots i.on{background:#F38DB5}
+.combo-bar .ghost{color:#fff;border-color:rgba(255,255,255,.35);height:44px}
+.combo-bar .buy{height:44px;padding:0 20px;margin:0}
+.combo-bar .buy:disabled{background:rgba(255,255,255,.18);color:rgba(255,255,255,.6);cursor:default}
+body.combo-on footer{padding-bottom:140px}
+@media (max-width:560px){.combo-bar .what{flex-basis:100%}.combo-bar .ghost,.combo-bar .buy{flex:1}}
+.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + var(--bar-h,67px) + 64px);translate:-50% 0;z-index:30;background:var(--paper);color:var(--ink);border:1px solid var(--line);padding:12px 16px;border-radius:12px;box-shadow:var(--shadow);font-weight:600;font-size:14px;max-width:calc(100% - 32px);text-align:center}
+.summary{background:var(--paper);border-radius:16px;width:min(560px,100%);max-height:100%;overflow:auto;padding:28px 24px;display:flex;flex-direction:column;gap:14px;position:relative;box-shadow:0 30px 80px -20px rgba(0,0,0,.5)}
+.summary h2{font:400 32px/1.05 var(--f-display);margin:0;color:var(--deep)}
+.summary ol{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;border-block:1px dashed var(--line);padding-block:12px}
+.summary li{display:flex;gap:10px;font-size:15px}
+.summary li span{font:500 12px/1.9 var(--f-mono);color:var(--muted);flex:none}
+.step{display:flex;flex-direction:column;gap:6px}
+.step small{font:500 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.wa{background:#1F8F55}
+.summary p{margin:0;color:var(--muted);font-size:14px}
+
+/* Rodapé */
+footer{border-top:1px solid var(--line);padding-block:44px;background:var(--blush-2)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:24px 48px;justify-content:space-between;align-items:flex-start}
+footer .logo{font-size:36px}
+footer p{margin:8px 0 0;color:var(--muted);max-width:40ch;font-size:15px}
+footer .socials a{width:42px;height:42px;border:1px solid var(--line)}
+footer small{display:block;width:100%;color:var(--muted);font-size:13px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="logo" href="#" id="home">Estante <em>Dela</em></a>
+    <nav class="socials" data-socials aria-label="Redes sociais"></nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow" id="acervo">Acervo</div>
+      <h1>Um ebook para <em>cada fase</em> da sua vida.</h1>
+      <div class="cats" id="cats" role="toolbar" aria-label="Categorias"></div>
+      <p>Da descoberta da gravidez à volta ao trabalho, da autoestima às receitas do dia a dia. Guias diretos, escritos para mulheres reais, prontos para ler no celular.</p>
+      <ul class="perks">
+        <li>Acesso imediato</li>
+        <li>Pagamento seguro pela Kiwify</li>
+        <li>Leia em qualquer aparelho</li>
+      </ul>
+    </div>
+    <div class="fan" id="fan" aria-hidden="true"></div>
+  </div>
+</section>
+
+
+<main class="wrap" id="main"></main>
+
+<section class="offers" id="combos">
+  <div class="wrap">
+    <div class="offers-head">
+      <div class="eyebrow">Combos</div>
+      <h2>Leve mais, pague menos</h2>
+      <p id="offers-sub"></p>
+    </div>
+    <div class="offer-grid" id="offers"></div>
+  </div>
+</section>
+
+
+<footer>
+  <div class="wrap">
+    <div>
+      <a class="logo" href="#">Estante <em>Dela</em></a>
+      <p>Ebooks para cada fase da vida da mulher. Compre pela Kiwify e receba o acesso na hora, no seu e-mail.</p>
+    </div>
+    <div>
+      <div class="eyebrow" style="margin-bottom:12px">Siga a Estante</div>
+      <nav class="socials" data-socials aria-label="Redes sociais"></nav>
+    </div>
+    <small id="copy"></small>
+  </div>
+</footer>
+
+<div class="combo-bar" id="cbar" hidden></div>
+<div class="toast" id="toast" role="status" hidden></div>
+<div id="layer" hidden></div>
+
+<script>
+/* ============================================================
+   CONFIGURAÇÃO — edite aqui
+   ============================================================ */
+const LOJA = {
+  nome: "Estante Dela",
+  instagram: "",   // ex: "https://instagram.com/seuperfil"
+  tiktok: "",      // ex: "https://tiktok.com/@seuperfil"
+  kwai: "",        // ex: "https://kwai.com/@seuperfil"
+  x: ""            // ex: "https://x.com/seuperfil"
+};
+
+/* Preços e combos. Cole o link de checkout da Kiwify de cada oferta. */
+const PRECO_EBOOK = 29.90;
+const OFERTAS = {
+  combo5:     { qtd: 5,  preco: 99.90,  link: "" },
+  combo10:    { qtd: 10, preco: 199.90, link: "" },
+  assinatura: { preco: 299.90, link: "" }   // todos os ebooks, por mês
+};
+/* WhatsApp que recebe a lista do combo: 55 + DDD + número, só dígitos */
+const WHATSAPP = "5564984410508";
+
+/* Cole o link de checkout da Kiwify de cada ebook entre as aspas.
+   Enquanto estiver vazio, o botão aparece como "Em breve". */
+const LINKS_KIWIFY = {
+  "001": "", // Sintomas Iniciais da Gravidez: Como Saber Se Estou Grávida?
+  "002": "", // O Guia Semana a Semana da Gravidez
+  "003": "", // Checklist da Gravidez: Tudo o Que Você Precisa Fazer Antes do Bebê Chegar
+  "004": "", // Exames Essenciais do Pré-Natal: O Que Não Pode Faltar?
+  "005": "", // Ansiedade na Gravidez: Como Lidar com Medos e Inseguranças
+  "006": "", // Autoestima na Gestação: Como se Sentir Bonita e Confiante
+  "007": "", // Exercícios para Grávidas: Mantenha-se Ativa e Saudável
+  "008": "", // Sexo na Gravidez: Mitos e Verdades
+  "009": "", // Direitos Trabalhistas da Gestante: O Que Você Precisa Saber
+  "010": "", // Parto Natural vs. Cesárea: Prós, Contras e Como Escolher sem Culpa
+  "011": "", // O Que Levar para a Maternidade: A Lista Completa Que Ninguém Te Conta
+  "012": "", // Alimentação na Gravidez: Receitas Saudáveis para Mãe e Bebê
+  "013": "", // 15 Receitas de Grelhados Saudáveis para Grávidas
+  "014": "", // 15 Receitas Saudáveis na Air Fryer para Gestantes
+  "015": "", // Receitas de Assados Nutritivos para Gestantes
+  "016": "", // Gravidez e Frituras: Um Guia Completo
+  "017": "", // Manual do Recém-Nascido: Guia de Sobrevivência para Mães de Primeira Viagem
+  "018": "", // Amamentação sem Estresse: Dicas para o Sucesso
+  "019": "", // Sono do Bebê: Como Estabelecer uma Rotina desde o Início
+  "020": "", // Primeiros Socorros para Bebês: O Que Toda Mãe Deve Saber
+  "021": "", // Meditação para Mães Exaustas: Mindfulness no Caos da Maternidade
+  "022": "", // Maternidade Solo por Escolha: Guia Prático
+  "023": "", // Como Conversar sobre Sexualidade com seu Filho Adolescente
+  "024": "", // Como Criar Filhos Homens sem Produzir mais um Machista
+  "025": "", // Redes Sociais: Como Proteger Seu Filho dos Perigos Online
+  "026": "", // Virei a Mãe Chata que Jurou Nunca Ser: Guia de Sobrevivência da Geração X
+  "027": "", // Relacionamento com Filhos Adultos: Como Manter o Vínculo
+  "028": "", // O Que Fazer Quando o Último Filho Deixa o Ninho?
+  "029": "", // Voltando a Estudar ou Trabalhar Depois de Anos Dedicada à Família
+  "030": "", // Receitas Low Carb: Volume 1, Café da Manhã
+  "031": "", // Receitas Low Carb: Volume 2, Almoço
+  "032": "", // Receitas Low Carb: Volume 3, Lanche da Tarde
+  "033": "", // 100 Receitas Low Carb: Volume 4, Jantares
+  "034": "", // 20 Sobremesas Fit e Fáceis
+  "035": "", // Receitas Fitness para o Café da Manhã
+  "036": "", // Receitas Fitness Pré-Treino
+  "037": "", // Receitas Fitness Pós-Treino
+  "038": "", // Receitas Fitness Para Dormir: Alimentação que Ajuda o Sono
+  "039": "", // Chás Funcionais: Saúde e Equilíbrio Natural
+  "040": "", // Os Benefícios do Suco de Frutas para Mulheres
+  "041": "", // O Poder dos Sucos de Frutas: Uma Jornada pela Beleza Interior
+  "042": "", // Os Benefícios da Banha de Porco para o Corpo Humano
+  "043": "", // Autoestima na Era dos Filtros
+  "044": "", // Como se Amar Depois de um Relacionamento Abusivo: 1ª Edição
+  "045": "", // Como se Amar Depois de um Relacionamento Abusivo: 2ª Edição
+  "046": "", // Como Parar de se Preocupar com a Opinião dos Outros: 1ª Edição
+  "047": "", // Como Parar de se Preocupar com a Opinião dos Outros: 2ª Edição
+  "048": "", // Pare de Levar Tudo para o Lado Pessoal
+  "049": "", // Gerenciando a Ansiedade no Século 21
+  "050": "", // Autocontrole em Tempos de Crise
+  "051": "", // O Poder da Empatia
+  "052": "", // Dicas de Autocuidado
+  "053": "", // Desintoxicação Digital: Recuperando Seu Tempo
+  "054": "", // O Lado Sombrio da Positividade
+  "055": "", // Pare de Ser Feliz: A Verdade Sobre o Sucesso
+  "056": "", // Você Está Pronto para Descobrir o Que Realmente Quer?
+  "057": "", // Produtividade Feminina Sem Estresse: 30 Dias Para Organizar Sua Vida
+  "058": "", // Pare de Adiar sua Vida: Procrastinação Feminina
+  "059": "", // Acorde e Domine: O Guia Definitivo para Criar uma Rotina Matinal de Sucesso
+  "060": "", // Produtividade Sem Esforço: Como Fazer Mais em Menos Tempo
+  "061": "", // O Poder do Foco: Estratégias para Eliminar Distrações
+  "062": "", // O Segredo do Flow: Como Trabalhar com Excelência
+  "063": "", // A Única Técnica de Produtividade que Funciona… ou Não
+  "064": "", // Desbloqueie Seu Potencial: Como Reprogramar Seu Cérebro para Alta Performance
+  "065": "", // Mindset de Aço: A Mentalidade dos Vencedores em 30 Dias
+  "066": "", // Performance Suprema: O Mapa
+  "067": "", // O Segredo que Ninguém Quer que Você Saiba
+  "068": "", // O Efeito Composto: Pequenos Hábitos que Levam a Grandes Resultados
+  "069": "", // Hábitos Atômicos para Empreendedores
+  "070": "", // Guia Definitivo para Marketing Digital para Iniciantes
+  "071": "", // Segredos para Aumentar seu Tráfego Orgânico
+  "072": "", // Checklist para Publicar um Post Perfeito no Instagram
+  "073": "", // Modelo de Proposta Comercial que Converte
+  "074": "", // Planilha de Controle Financeiro para Pequenos Negócios
+  "075": "", // Hábitos Financeiros dos Milionários: Como os Ricos Pensam e Agem Diferente
+  "076": "", // Consultoria 4.0: Como Usar IA para Oferecer Serviços Mais Eficientes, 1ª Edição
+  "077": "", // Consultoria 4.0: Como Usar IA para Oferecer Serviços Mais Eficientes, 2ª Edição
+  "078": "", // EQ Superior a IQ: Como a Inteligência Emocional Pode Alavancar Sua Carreira
+  "079": "", // Humanos e Máquinas: Como se Preparar para um Mercado de Trabalho Dominado pela IA
+  "080": "", // IA na Medicina, Direito e Engenharia: O Fim das Profissões ou uma Nova Era?
+  "081": "", // O Futuro do Trabalho: Serviços Inteligentes
+  "082": "", // Profissões do Amanhã: Quais Carreiras Surgirão com a IA?
+  "083": "", // Curso Completo de Automaquiagem: Aprenda a Valorizar Sua Beleza
+  "084": "", // Maquiagem para Diferentes Ocasiões: Do Básico ao Glamour
+  "085": "", // Poses para Boas Fotos
+  "086": "", // Pack de Presets para Edição de Fotos
+  "087": "", // A Formação e o Poder Energético dos Cristais
+  "088": "", // Como Fazer a Ativação dos Banhos de Ervas
+  "089": "", // Os 19 Banhos de Ervas Mais Poderosos
+  "090": "", // Feng Shui para Apartamentos Pequenos: Decoração + Bem-Estar
+  "091": "", // Feminismo para Mulheres que Odeiam Lacração
+  "092": "", // A Sexualização da Mulher na Mídia: Empoderamento ou Objetificação?
+  "093": "", // Privacidade Violada: Os Riscos do Vazamento de Conteúdo Íntimo
+  "094": "", // Exploração e Pressão Financeira: O Lado Sombrio do OnlyFans
+  "095": "", // Vício em Validação: A Dependência Psicológica do OnlyFans
+  "096": "", // Esgotamento Físico e Mental: O Preço Oculto do Conteúdo Adulto
+  "097": "", // O Prazer é Seu: Reconectando-se Com Seu Corpo e Desejo Depois dos 40
+  "098": "", // Como Ser a Amante (de Si Mesma): Autoerotismo depois dos 40
+  "099": "", // A Dimensão Sociocultural, Histórica e Técnica do BDSM
+};
+
+/* ============================================================
+   Catálogo (gerado a partir dos PDFs)
+   ============================================================ */
+const EBOOKS = [{"id": "001", "slug": "Sintomas-Iniciais-da-Gravidez-Como-Saber-Se-Estou-Gravida", "t": "Sintomas Iniciais da Gravidez: Como Saber Se Estou Grávida?", "c": "gestacao", "d": "Os primeiros sinais do corpo, quando fazer o teste e como lidar com a avalanche de emoções da dúvida.", "p": 20}, {"id": "002", "slug": "O-Guia-Semana-a-Semana-da-Gravidez-O-que-Esperar-e-Como-se-Preparar", "t": "O Guia Semana a Semana da Gravidez", "c": "gestacao", "d": "O que esperar em cada fase da gestação e como se preparar com confiança e tranquilidade.", "p": 20}, {"id": "003", "slug": "Checklist-da-Gravidez-Tudo-o-Que-Voce-Precisa-Fazer-Antes-do-Bebe-Chegar", "t": "Checklist da Gravidez: Tudo o Que Você Precisa Fazer Antes do Bebê Chegar", "c": "gestacao", "d": "Um roteiro completo para uma gestação organizada, saudável e emocionalmente equilibrada.", "p": 20}, {"id": "004", "slug": "Exames-Essenciais-do-Pre-Natal-O-Que-Nao-Pode-Faltar", "t": "Exames Essenciais do Pré-Natal: O Que Não Pode Faltar?", "c": "gestacao", "d": "Cada exame explicado: para que serve, quando fazer e por que ele protege você e o bebê.", "p": 20}, {"id": "005", "slug": "Ansiedade-na-Gravidez-Como-Lidar-com-Medos-e-Insegurancas", "t": "Ansiedade na Gravidez: Como Lidar com Medos e Inseguranças", "c": "gestacao", "d": "Entenda a montanha-russa emocional da gestação e aprenda a recuperar a calma e a confiança.", "p": 20}, {"id": "006", "slug": "Autoestima-na-Gestacao-Como-se-Sentir-Bonita-e-Confiante", "t": "Autoestima na Gestação: Como se Sentir Bonita e Confiante", "c": "gestacao", "d": "Para atravessar as mudanças do corpo e da mente sem perder o amor por quem você é.", "p": 20}, {"id": "007", "slug": "Exercicios-para-Gravidas-Mantenha-se-Ativa-e-Saudavel", "t": "Exercícios para Grávidas: Mantenha-se Ativa e Saudável", "c": "gestacao", "d": "Movimentos seguros para uma gravidez forte, equilibrada e feliz, trimestre a trimestre.", "p": 20}, {"id": "008", "slug": "Sexo-na-Gravidez-Mitos-e-Verdades", "t": "Sexo na Gravidez: Mitos e Verdades", "c": "gestacao", "d": "Um guia para casais manterem a intimidade durante a gestação, sem medo e sem tabu.", "p": 20}, {"id": "009", "slug": "Direitos-Trabalhistas-da-Gestante-O-Que-Voce-Precisa-Saber", "t": "Direitos Trabalhistas da Gestante: O Que Você Precisa Saber", "c": "gestacao", "d": "Estabilidade, licença, consultas e tudo o que a lei garante para proteger você e seu bebê.", "p": 20}, {"id": "010", "slug": "Parto-Natural-vs-Cesarea-Pros-Contras-e-Como-Escolher-sem-Culpa", "t": "Parto Natural vs. Cesárea: Prós, Contras e Como Escolher sem Culpa", "c": "gestacao", "d": "Informação clara sobre os dois caminhos para você decidir com segurança e em paz.", "p": 20}, {"id": "011", "slug": "O-Que-Levar-para-a-Maternidade-A-Lista-Completa-Que-Ninguem-Te-Conta", "t": "O Que Levar para a Maternidade: A Lista Completa Que Ninguém Te Conta", "c": "gestacao", "d": "A mala da mãe, do bebê e do acompanhante, com checklist para chegar 100% preparada.", "p": 20}, {"id": "012", "slug": "Alimentacao-na-Gravidez-Receitas-Saudaveis-para-Mae-e-Bebe", "t": "Alimentação na Gravidez: Receitas Saudáveis para Mãe e Bebê", "c": "gestacao", "d": "Receitas nutritivas para enjoos, desejos e cada fase do desenvolvimento do bebê.", "p": 20}, {"id": "013", "slug": "15-Receitas-de-Grelhados-Saudaveis-para-Gravidas", "t": "15 Receitas de Grelhados Saudáveis para Grávidas", "c": "gestacao", "d": "Grelhados ricos em proteína, ferro e vitaminas, com sabor e pouco óleo.", "p": 20}, {"id": "014", "slug": "15-Receitas-Saudaveis-na-Air-Fryer-para-Gestantes", "t": "15 Receitas Saudáveis na Air Fryer para Gestantes", "c": "gestacao", "d": "Praticidade na cozinha durante a gestação, com receitas leves feitas na air fryer.", "p": 20}, {"id": "015", "slug": "Receitas-de-Assados-Nutritivos-para-Gestantes", "t": "Receitas de Assados Nutritivos para Gestantes", "c": "gestacao", "d": "15 assados práticos com ácido fólico, ferro, cálcio e proteínas para essa fase única.", "p": 20}, {"id": "016", "slug": "Gravidez-e-Frituras-Um-Guia-Completo", "t": "Gravidez e Frituras: Um Guia Completo", "c": "gestacao", "d": "Os efeitos das frituras na gestação e alternativas saborosas para matar a vontade.", "p": 20}, {"id": "017", "slug": "Manual-do-Recem-Nascido", "t": "Manual do Recém-Nascido: Guia de Sobrevivência para Mães de Primeira Viagem", "c": "maternidade", "d": "Banho, choro, cólica, sono e tudo o que ninguém explica sobre os primeiros dias com o bebê.", "p": 21}, {"id": "018", "slug": "Amamentacao-sem-Estresse-Dicas-para-o-Sucesso", "t": "Amamentação sem Estresse: Dicas para o Sucesso", "c": "maternidade", "d": "Como enfrentar dor, cansaço e pressão e transformar a amamentação em confiança e vínculo.", "p": 20}, {"id": "019", "slug": "Sono-do-Bebe-Como-Estabelecer-uma-Rotina-desde-o-Inicio", "t": "Sono do Bebê: Como Estabelecer uma Rotina desde o Início", "c": "maternidade", "d": "Guia prático para criar uma rotina de sono e ter noites mais tranquilas em casa.", "p": 20}, {"id": "020", "slug": "PRIMEIROS-SOCORROS-PARA-BEBES-O-QUE-TODA-MAE-DEVE-SABER", "t": "Primeiros Socorros para Bebês: O Que Toda Mãe Deve Saber", "c": "maternidade", "d": "Como agir em engasgos, febre, quedas e outras emergências até a ajuda chegar.", "p": 20}, {"id": "021", "slug": "Meditacao-para-Maes-Exaustas-Mindfulness-Aplicado-no-Caos-da-Maternidade", "t": "Meditação para Mães Exaustas: Mindfulness no Caos da Maternidade", "c": "maternidade", "d": "Práticas de 5 minutos ou menos para encontrar paz no meio da rotina com filhos.", "p": 20}, {"id": "022", "slug": "Maternidade-Solo-por-Escolha-Guia-Pratico", "t": "Maternidade Solo por Escolha: Guia Prático", "c": "maternidade", "d": "Planejamento, caminhos possíveis e rede de apoio para quem decidiu ser mãe sozinha.", "p": 20}, {"id": "023", "slug": "Como-Conversar-sobre-Sexualidade-com-seu-Filho-Adolescente", "t": "Como Conversar sobre Sexualidade com seu Filho Adolescente", "c": "familia", "d": "Como abrir o diálogo sobre uma das conversas mais delicadas e importantes da criação.", "p": 20}, {"id": "024", "slug": "Como-Criar-Filhos-Homens-sem-Produzir-mais-um-Machista", "t": "Como Criar Filhos Homens sem Produzir mais um Machista", "c": "familia", "d": "Um guia de educação antissexista para pais que querem criar meninos respeitosos.", "p": 20}, {"id": "025", "slug": "Redes-Sociais-Como-Proteger-Seu-Filho-dos-Perigos-Online", "t": "Redes Sociais: Como Proteger Seu Filho dos Perigos Online", "c": "familia", "d": "Riscos reais da internet para crianças e adolescentes e o que fazer para protegê-los.", "p": 20}, {"id": "026", "slug": "Virei-a-Mae-Chata-que-Jurou-Nunca-Ser-Guia-de-Sobrevivencia-da-Geracao-X", "t": "Virei a Mãe Chata que Jurou Nunca Ser: Guia de Sobrevivência da Geração X", "c": "familia", "d": "Um manual honesto e bem-humorado para quem prometeu ser a mãe descolada e virou o oposto.", "p": 20}, {"id": "027", "slug": "Relacionamento-com-Filhos-Adultos-Como-Manter-o-Vinculo", "t": "Relacionamento com Filhos Adultos: Como Manter o Vínculo", "c": "familia", "d": "Como fortalecer os laços quando os filhos crescem e constroem a própria vida.", "p": 20}, {"id": "028", "slug": "O-Que-Fazer-Quando-o-Ultimo-Filho-Deixa-o-Ninho", "t": "O Que Fazer Quando o Último Filho Deixa o Ninho?", "c": "familia", "d": "Um guia prático para renascer no silêncio da casa vazia e reencontrar seus planos.", "p": 20}, {"id": "029", "slug": "Voltando-a-Estudar-ou-Trabalhar-Depois-de-Anos-Dedicada-a-Familia", "t": "Voltando a Estudar ou Trabalhar Depois de Anos Dedicada à Família", "c": "familia", "d": "Para reencontrar seu propósito e recuperar a confiança depois de anos cuidando de todos.", "p": 20}, {"id": "030", "slug": "Colecao-de-Receitas-Vital-Fit", "t": "Receitas Low Carb: Volume 1, Café da Manhã", "c": "receitas", "d": "Cafés da manhã low carb equilibrados para dar energia, foco e disposição desde cedo.", "p": 29}, {"id": "031", "slug": "E-book-2-Receitas-Low-Carb-de-Almoco", "t": "Receitas Low Carb: Volume 2, Almoço", "c": "receitas", "d": "Pratos principais, peixes e acompanhamentos low carb para um almoço leve e saboroso.", "p": 30}, {"id": "032", "slug": "Receitas-Low-Carb-Lanche-da-Tarde-Volume-3", "t": "Receitas Low Carb: Volume 3, Lanche da Tarde", "c": "receitas", "d": "25 lanches simples com ingredientes comuns da cozinha brasileira.", "p": 28}, {"id": "033", "slug": "100-Receitas-Low-Carb-Volume-4-Jantares", "t": "100 Receitas Low Carb: Volume 4, Jantares", "c": "receitas", "d": "25 jantares leves para fechar o dia bem nutrida, sem pesar no sono.", "p": 30}, {"id": "034", "slug": "20-Sobremesas-Fit-e-Faceis-Com-ingredientes-simples-da-cozinha-brasileira", "t": "20 Sobremesas Fit e Fáceis", "c": "receitas", "d": "Doces práticos e rápidos feitos só com ingredientes simples da cozinha brasileira.", "p": 25}, {"id": "035", "slug": "Receitas-Fitness-para-o-Cafe-da-Manha", "t": "Receitas Fitness para o Café da Manhã", "c": "receitas", "d": "Opções saudáveis prontas em menos de 10 minutos para começar o dia com energia.", "p": 20}, {"id": "036", "slug": "Receitas-Fitness-Pre-Treino", "t": "Receitas Fitness Pré-Treino", "c": "receitas", "d": "Combinações de nutrientes para ter mais energia e desempenho no treino.", "p": 20}, {"id": "037", "slug": "Receitas-Fitness-Pos-Treino", "t": "Receitas Fitness Pós-Treino", "c": "receitas", "d": "Receitas práticas e saborosas para otimizar a recuperação muscular.", "p": 20}, {"id": "038", "slug": "Receitas-Fitness-Para-Dormir-Alimentacao-que-Ajuda-o-Sono", "t": "Receitas Fitness Para Dormir: Alimentação que Ajuda o Sono", "c": "receitas", "d": "O que comer à noite para transformar a qualidade das suas noites de sono.", "p": 20}, {"id": "039", "slug": "CHAS-FUNCIONAIS-Saude-e-Equilibrio-Natural", "t": "Chás Funcionais: Saúde e Equilíbrio Natural", "c": "receitas", "d": "Folhas, raízes e flores que fortalecem o corpo e trazem bem-estar no dia a dia.", "p": 29}, {"id": "040", "slug": "Os-Beneficios-do-Suco-de-Frutas-para-Mulheres", "t": "Os Benefícios do Suco de Frutas para Mulheres", "c": "receitas", "d": "Sucos que hidratam, nutrem e cuidam da saúde e da beleza feminina.", "p": 20}, {"id": "041", "slug": "O-Poder-dos-Sucos-de-Frutas-Uma-Jornada-pela-Beleza-Interior", "t": "O Poder dos Sucos de Frutas: Uma Jornada pela Beleza Interior", "c": "receitas", "d": "Como os sucos de frutas podem transformar sua pele, sua energia e sua saúde.", "p": 9}, {"id": "042", "slug": "Os-Beneficios-da-Banha-de-Porco-para-o-Corpo-Humano", "t": "Os Benefícios da Banha de Porco para o Corpo Humano", "c": "receitas", "d": "A gordura de milênios que foi demonizada e o que a nutrição diz sobre ela hoje.", "p": 20}, {"id": "043", "slug": "Autoestima-na-Era-dos-Filtros", "t": "Autoestima na Era dos Filtros", "c": "autoestima", "d": "Um convite para se libertar da comparação nas redes e se ver com outros olhos.", "p": 20}, {"id": "044", "slug": "Como-se-Amar-Depois-de-um-Relacionamento-Abusivo-1-Edicao", "t": "Como se Amar Depois de um Relacionamento Abusivo: 1ª Edição", "c": "autoestima", "d": "Um guia de cura emocional e renascimento pessoal para recomeçar a relação com você mesma.", "p": 20}, {"id": "045", "slug": "Como-se-Amar-Depois-de-um-Relacionamento-Abusivo-2-Edicao", "t": "Como se Amar Depois de um Relacionamento Abusivo: 2ª Edição", "c": "autoestima", "d": "Uma jornada de recuperação emocional, passo a passo, depois de uma relação abusiva.", "p": 20}, {"id": "046", "slug": "Como-Parar-de-se-Preocupar-com-a-Opiniao-dos-Outros-1-Edicao", "t": "Como Parar de se Preocupar com a Opinião dos Outros: 1ª Edição", "c": "autoestima", "d": "Um guia prático para a liberdade emocional e para viver sem medo do julgamento.", "p": 20}, {"id": "047", "slug": "Como-Parar-de-se-Preocupar-com-a-Opiniao-dos-Outros-2-Edicao", "t": "Como Parar de se Preocupar com a Opinião dos Outros: 2ª Edição", "c": "autoestima", "d": "10 técnicas da psicologia comportamental para ganhar autonomia emocional.", "p": 20}, {"id": "048", "slug": "Pare-de-Levar-Tudo-para-o-Lado-Pessoal", "t": "Pare de Levar Tudo para o Lado Pessoal", "c": "autoestima", "d": "Técnicas para construir sua blindagem emocional e não se abalar com tudo.", "p": 20}, {"id": "049", "slug": "Gerenciando-a-Ansiedade-no-Seculo-21", "t": "Gerenciando a Ansiedade no Século 21", "c": "autoestima", "d": "Técnicas para acalmar a mente em tempos de hiperconectividade.", "p": 20}, {"id": "050", "slug": "Autocontrole-em-Tempos-de-Crise", "t": "Autocontrole em Tempos de Crise", "c": "autoestima", "d": "Como gerenciar emoções e tomar decisões sábias nos momentos mais difíceis.", "p": 20}, {"id": "051", "slug": "O-Poder-da-Empatia", "t": "O Poder da Empatia", "c": "autoestima", "d": "Comunicação não violenta e escuta ativa para melhorar todos os seus relacionamentos.", "p": 20}, {"id": "052", "slug": "Dicas-de-Autocuidado", "t": "Dicas de Autocuidado", "c": "autoestima", "d": "Um guia para o ano todo, com pequenas ações que geram grandes mudanças no seu bem-estar.", "p": 35}, {"id": "053", "slug": "Desintoxicacao-Digital-Recuperando-Seu-Tempo", "t": "Desintoxicação Digital: Recuperando Seu Tempo", "c": "autoestima", "d": "Como reconhecer a dependência do celular e reconquistar o controle da sua rotina.", "p": 20}, {"id": "054", "slug": "O-LADO-SOMBRIO-DA-POSITIVIDADE", "t": "O Lado Sombrio da Positividade", "c": "autoestima", "d": "Uma crítica aos perigos do pensamento positivo obrigatório e da felicidade forçada.", "p": 20}, {"id": "055", "slug": "Pare-de-Ser-Feliz-A-Verdade-Sobre-o-Sucesso", "t": "Pare de Ser Feliz: A Verdade Sobre o Sucesso", "c": "autoestima", "d": "Um convite ao desconforto produtivo, longe da armadilha da felicidade forçada.", "p": 20}, {"id": "056", "slug": "VOCE-ESTA-PRONTO-PARA-DESCOBRIR-O-QUE-REALMENTE-QUER", "t": "Você Está Pronto para Descobrir o Que Realmente Quer?", "c": "autoestima", "d": "O questionamento que pode tirar você da zona de conforto e mostrar o que importa.", "p": 20}, {"id": "057", "slug": "Produtividade-Feminina-Sem-Estresse-30-Dias-Para-Organizar-Sua-Vida", "t": "Produtividade Feminina Sem Estresse: 30 Dias Para Organizar Sua Vida", "c": "produtividade", "d": "Um plano de 30 dias para equilibrar trabalho, estudos e vida pessoal sem se esgotar.", "p": 20}, {"id": "058", "slug": "Pare-de-Adiar-sua-Vida-Procrastinacao-Feminina", "t": "Pare de Adiar sua Vida: Procrastinação Feminina", "c": "produtividade", "d": "Produtividade emocional para mulheres que querem parar de dizer \"amanhã eu começo\".", "p": 20}, {"id": "059", "slug": "Acorde-e-Domine-O-Guia-Definitivo-para-Criar-uma-Rotina-Matinal-de-Sucesso", "t": "Acorde e Domine: O Guia Definitivo para Criar uma Rotina Matinal de Sucesso", "c": "produtividade", "d": "Hábitos matinais de pessoas de alto desempenho para transformar suas manhãs.", "p": 20}, {"id": "060", "slug": "Produtividade-Sem-Esforco-Como-Fazer-Mais-em-Menos-Tempo", "t": "Produtividade Sem Esforço: Como Fazer Mais em Menos Tempo", "c": "produtividade", "d": "Minimalismo e automação para render mais gastando menos energia.", "p": 20}, {"id": "061", "slug": "O-Poder-do-Foco-Estrategias-Cientificas-para-Eliminar-Distracoes-e-Turbinar-Seus-Resultados", "t": "O Poder do Foco: Estratégias para Eliminar Distrações", "c": "produtividade", "d": "Estratégias científicas para cortar distrações e turbinar seus resultados.", "p": 20}, {"id": "062", "slug": "O-Segredo-do-Flow-Como-Trabalhar-com-Excelencia", "t": "O Segredo do Flow: Como Trabalhar com Excelência", "c": "produtividade", "d": "A ciência do estado de fluxo e como alcançá-lo no seu trabalho.", "p": 19}, {"id": "063", "slug": "A-Unica-Tecnica-de-Produtividade-que-Funciona-ou-Nao", "t": "A Única Técnica de Produtividade que Funciona… ou Não", "c": "produtividade", "d": "Por que buscamos respostas fáceis para problemas complexos, e o que fazer em vez disso.", "p": 20}, {"id": "064", "slug": "Desbloqueie-Seu-Potencial-Como-Reprogramar-Seu-Cerebro-para-Alta-Performance", "t": "Desbloqueie Seu Potencial: Como Reprogramar Seu Cérebro para Alta Performance", "c": "produtividade", "d": "Técnicas baseadas em neurociência para aumentar foco, energia e produtividade.", "p": 20}, {"id": "065", "slug": "Mindset-de-Aco-Desenvolvendo-a-Mentalidade-dos-Vencedores-em-30-Dias", "t": "Mindset de Aço: A Mentalidade dos Vencedores em 30 Dias", "c": "produtividade", "d": "Uma jornada de 30 dias para desenvolver disciplina, resiliência e confiança.", "p": 20}, {"id": "066", "slug": "PERFORMANCE-SUPREMA-O-MAPA", "t": "Performance Suprema: O Mapa", "c": "produtividade", "d": "O passo a passo de onde você está até a sua melhor versão.", "p": 54}, {"id": "067", "slug": "O-Segredo-que-Ninguem-Quer-que-Voce-Saiba", "t": "O Segredo que Ninguém Quer que Você Saiba", "c": "produtividade", "d": "Os princípios não ditos que separam os bem-sucedidos do resto.", "p": 20}, {"id": "068", "slug": "O-Efeito-Composto-Pequenos-Habitos-que-Levam-a-Grandes-Resultados", "t": "O Efeito Composto: Pequenos Hábitos que Levam a Grandes Resultados", "c": "produtividade", "d": "Como pequenas decisões diárias, repetidas com constância, transformam sua vida.", "p": 20}, {"id": "069", "slug": "Habitos-Atomicos-para-Empreendedores", "t": "Hábitos Atômicos para Empreendedores", "c": "produtividade", "d": "Rotinas que impulsionam seu negócio a partir de pequenas ações diárias.", "p": 20}, {"id": "070", "slug": "Guia-Definitivo-para-Marketing-Digital-para-Iniciantes", "t": "Guia Definitivo para Marketing Digital para Iniciantes", "c": "negocios", "d": "As estratégias essenciais para começar no marketing digital do zero.", "p": 30}, {"id": "071", "slug": "Segredos-para-Aumentar-seu-Trafego-Organico", "t": "Segredos para Aumentar seu Tráfego Orgânico", "c": "negocios", "d": "Estratégias que funcionam para crescer sua presença digital sem pagar anúncios.", "p": 30}, {"id": "072", "slug": "Checklist-para-Publicar-um-Post-Perfeito-no-Instagram", "t": "Checklist para Publicar um Post Perfeito no Instagram", "c": "negocios", "d": "30 etapas práticas, do planejamento ao pós-publicação, para elevar seu perfil.", "p": 30}, {"id": "073", "slug": "Modelo-de-Proposta-Comercial-que-Converte", "t": "Modelo de Proposta Comercial que Converte", "c": "negocios", "d": "Técnicas e exemplos do mercado nacional para propostas que fecham negócio.", "p": 30}, {"id": "074", "slug": "Planilha-de-Controle-Financeiro-para-Pequenos-Negocios", "t": "Planilha de Controle Financeiro para Pequenos Negócios", "c": "negocios", "d": "Como organizar e acompanhar as finanças do seu negócio de forma simples.", "p": 30}, {"id": "075", "slug": "Habitos-Financeiros-dos-Milionarios-Como-os-Ricos-Pensam-e-Agem-Diferente", "t": "Hábitos Financeiros dos Milionários: Como os Ricos Pensam e Agem Diferente", "c": "negocios", "d": "Os padrões de comportamento que constroem riqueza sustentável ao longo do tempo.", "p": 20}, {"id": "076", "slug": "Consultoria-40-Como-Usar-Inteligencia-Artificial-para-Oferecer-Servicos-Mais-Eficientes-1-Edicao", "t": "Consultoria 4.0: Como Usar IA para Oferecer Serviços Mais Eficientes, 1ª Edição", "c": "negocios", "d": "Como consultores e prestadores de serviço podem usar IA para entregar mais.", "p": 20}, {"id": "077", "slug": "Consultoria-40-Como-Usar-Inteligencia-Artificial-para-Oferecer-Servicos-Mais-Eficientes-2-Edicao", "t": "Consultoria 4.0: Como Usar IA para Oferecer Serviços Mais Eficientes, 2ª Edição", "c": "negocios", "d": "A virada de chave da IA na consultoria, com aplicações práticas para o seu serviço.", "p": 20}, {"id": "078", "slug": "EQ-Superior-a-IQ-Como-a-Inteligencia-Emocional-Pode-Alavancar-Sua-Carreira", "t": "EQ Superior a IQ: Como a Inteligência Emocional Pode Alavancar Sua Carreira", "c": "negocios", "d": "Inteligência emocional aplicada ao trabalho e à liderança, com exemplos reais.", "p": 20}, {"id": "079", "slug": "Humanos-e-Maquinas-Como-se-Preparar-para-um-Mercado-de-Trabalho-Dominado-pela-IA", "t": "Humanos e Máquinas: Como se Preparar para um Mercado de Trabalho Dominado pela IA", "c": "negocios", "d": "As habilidades técnicas e emocionais para se adaptar ao futuro do trabalho.", "p": 20}, {"id": "080", "slug": "IA-na-Medicina-Direito-e-Engenharia-O-Fim-das-Profissoes-ou-uma-Nova-Era", "t": "IA na Medicina, Direito e Engenharia: O Fim das Profissões ou uma Nova Era?", "c": "negocios", "d": "Como a IA está mudando profissões tradicionais e como os profissionais podem se adaptar.", "p": 20}, {"id": "081", "slug": "O-Futuro-do-Trabalho-Servicos-Inteligentes-Como-a-IA-Esta-Revolucionando-o-Atendimento-ao-Cliente-e-", "t": "O Futuro do Trabalho: Serviços Inteligentes", "c": "negocios", "d": "Como a IA está revolucionando o atendimento ao cliente e as consultorias.", "p": 20}, {"id": "082", "slug": "Profissoes-do-Amanha-Quais-Carreiras-Surgirao-com-a-Inteligencia-Artificial", "t": "Profissões do Amanhã: Quais Carreiras Surgirão com a IA?", "c": "negocios", "d": "Um guia didático sobre as novas carreiras que a inteligência artificial vai criar.", "p": 20}, {"id": "083", "slug": "Curso-Completo-de-Automaquiagem-Aprenda-a-Valorizar-Sua-Beleza", "t": "Curso Completo de Automaquiagem: Aprenda a Valorizar Sua Beleza", "c": "beleza", "d": "Técnicas do básico ao avançado para realçar sua beleza natural com as próprias mãos.", "p": 35}, {"id": "084", "slug": "E-book-de-Maquiagem-para-Diferentes-Ocasioes-Do-Basico-ao-Glamour", "t": "Maquiagem para Diferentes Ocasiões: Do Básico ao Glamour", "c": "beleza", "d": "Da make do dia a dia ao glamour da noite, com dicas para cada momento.", "p": 35}, {"id": "085", "slug": "Poses-para-Boas-Fotos", "t": "Poses para Boas Fotos", "c": "beleza", "d": "Linguagem corporal, luz e composição para fotos que você vai querer postar.", "p": 20}, {"id": "086", "slug": "Pack-de-Presets-para-Edicao-de-Fotos-Transforme-Suas-Imagens-com-Um-Clique", "t": "Pack de Presets para Edição de Fotos", "c": "beleza", "d": "Transforme suas imagens com um clique e deixe o feed com cara de profissional.", "p": 35}, {"id": "087", "slug": "A-Formacao-e-o-Poder-Energetico-dos-Cristais", "t": "A Formação e o Poder Energético dos Cristais", "c": "energia", "d": "Cristaloterapia: a conexão entre cor, formação e energia de cada cristal.", "p": 20}, {"id": "088", "slug": "Ebook-Como-Fazer-a-Ativacao-dos-Banhos-de-Ervas", "t": "Como Fazer a Ativação dos Banhos de Ervas", "c": "energia", "d": "O passo a passo para potencializar seus banhos energéticos.", "p": 18}, {"id": "089", "slug": "Os-19-Banhos-de-Ervas-Mais-Poderosos", "t": "Os 19 Banhos de Ervas Mais Poderosos", "c": "energia", "d": "As ervas mais usadas em banhos energéticos e o que cada uma traz para você.", "p": 20}, {"id": "090", "slug": "Feng-Shui-para-Apartamentos-Pequenos-Decoracao-Bem-Estar", "t": "Feng Shui para Apartamentos Pequenos: Decoração + Bem-Estar", "c": "energia", "d": "Como transformar um espaço pequeno em um refúgio harmonioso.", "p": 20}, {"id": "091", "slug": "Feminismo-para-Mulheres-que-Odeiam-Lacracao", "t": "Feminismo para Mulheres que Odeiam Lacração", "c": "sociedade", "d": "Um feminismo pragmático, focado em resultados concretos na vida das mulheres.", "p": 20}, {"id": "092", "slug": "A-Sexualizacao-da-Mulher-na-Midia-Empoderamento-ou-Objetificacao", "t": "A Sexualização da Mulher na Mídia: Empoderamento ou Objetificação?", "c": "sociedade", "d": "Onde termina a independência e começa a exploração do corpo feminino nas redes.", "p": 20}, {"id": "093", "slug": "Privacidade-Violada-Os-Riscos-do-Vazamento-de-Conteudo-Intimo", "t": "Privacidade Violada: Os Riscos do Vazamento de Conteúdo Íntimo", "c": "sociedade", "d": "Como vazamentos e deepfakes destroem vidas, e o que fazer para se proteger.", "p": 20}, {"id": "094", "slug": "Exploracao-e-Pressao-Financeira-O-Lado-Sombrio-do-OnlyFans", "t": "Exploração e Pressão Financeira: O Lado Sombrio do OnlyFans", "c": "sociedade", "d": "O que a promessa de dinheiro fácil esconde sobre as plataformas de conteúdo adulto.", "p": 18}, {"id": "095", "slug": "Vicio-em-Validacao-A-Dependencia-Psicologica-do-OnlyFans", "t": "Vício em Validação: A Dependência Psicológica do OnlyFans", "c": "sociedade", "d": "Como likes, mensagens e assinantes podem virar vício e afetar a autoestima.", "p": 19}, {"id": "096", "slug": "Esgotamento-Fisico-e-Mental-O-Preco-Oculto-do-Conteudo-Adulto", "t": "Esgotamento Físico e Mental: O Preço Oculto do Conteúdo Adulto", "c": "sociedade", "d": "O impacto real dessa rotina na saúde física e mental de quem produz conteúdo.", "p": 20}, {"id": "097", "slug": "O-Prazer-e-Seu-Reconectando-se-Com-Seu-Corpo-e-Desejo-Depois-dos-40", "t": "O Prazer é Seu: Reconectando-se Com Seu Corpo e Desejo Depois dos 40", "c": "adulto", "d": "Uma jornada de autodescoberta e reconexão com o corpo e o desejo na maturidade.", "p": 20}, {"id": "098", "slug": "Como-Ser-a-Amante-de-Si-Mesma-Autoerotismo-depois-dos-40", "t": "Como Ser a Amante (de Si Mesma): Autoerotismo depois dos 40", "c": "adulto", "d": "Sexualidade madura, autocuidado e prazer sem culpa.", "p": 20}, {"id": "099", "slug": "A-Dimensao-Sociocultural-Historica-e-Tecnica-do-BDSM-Uma-Abordagem-Puramente-Informativa", "t": "A Dimensão Sociocultural, Histórica e Técnica do BDSM", "c": "adulto", "d": "Uma abordagem puramente informativa sobre história, cultura, consentimento e segurança.", "p": 20}];
+
+const CATS = {
+  produtividade:["Produtividade e mentalidade", "Rotina, foco e hábitos que fazem a vida andar."],
+  beleza:       ["Beleza e fotos", "Maquiagem, poses e edição para se ver bonita."],
+  gestacao:     ["Gestação", "Da descoberta ao parto, com informação e acolhimento."],
+  maternidade:  ["Bebê e maternidade", "Os primeiros meses, sem pânico e sem culpa."],
+  familia:      ["Filhos e família", "Criar, conversar e se reencontrar em cada fase."],
+  receitas:     ["Receitas e nutrição", "Low carb, fitness, chás e sucos para o dia a dia."],
+  autoestima:   ["Autoestima e emoções", "Para se cuidar por dentro e se libertar do julgamento."],
+  negocios:     ["Negócios, carreira e IA", "Marketing, finanças e o futuro do trabalho."],
+  energia:      ["Energia e bem-estar", "Cristais, banhos de ervas e uma casa em harmonia."],
+  sociedade:    ["Mulher e sociedade", "Corpo, mídia, redes e os debates que importam."],
+  adulto:       ["+18", "Sexualidade adulta. Conteúdo para maiores de idade."]
+};
+const ORDER = Object.keys(CATS);
+
+const ICONS = {
+  instagram:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>',
+  tiktok:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 3c.4 2.2 1.8 3.6 4 3.8v3.1c-1.5 0-2.9-.4-4-1.2v6.6c0 3.4-2.7 5.7-5.8 5.7A5.7 5.7 0 0 1 5 15.3c0-3.5 3-6 6.6-5.6v3.2c-1.6-.4-3.4.6-3.4 2.4 0 1.4 1.1 2.5 2.6 2.5 1.6 0 2.6-1.1 2.6-2.9V3h3.2z"/></svg>',
+  kwai:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="13" height="11" rx="3"/><path d="m16 11 5-3v9l-5-3"/><circle cx="7" cy="4" r="1.6"/><circle cx="12" cy="4" r="1.6"/></svg>',
+  x:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.8 3h3.1l-6.8 7.7L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.3-8.3L2 3h6.4l4.4 5.8L17.8 3zm-1.1 16.2h1.7L7.4 4.7H5.6l11.1 14.5z"/></svg>'
+};
+const NOMES_REDE = {instagram:"Instagram", tiktok:"TikTok", kwai:"Kwai", x:"X"};
+
+/* ============================================================ */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+const byCat = {}; EBOOKS.forEach(e => (byCat[e.c] ||= []).push(e));
+const coverSrc = e => (window.CAPAS_EMBUTIDAS && CAPAS_EMBUTIDAS[e.slug]) || ("capas/" + e.slug + ".jpg");
+/* troca o #categoria do endereço sem quebrar onde o navegador bloqueia */
+function setHash(h) {
+  try { history.replaceState(null, "", h ? "#" + h : location.pathname + location.search); }
+  catch (_) { try { if (h) location.hash = h; else if (location.hash) location.hash = ""; } catch (__) {} }
+}
+let adultOk = false;
+try { adultOk = sessionStorage.getItem("estante18") === "1"; } catch (_) {}
+let state = { cat: "todas", combo: null };
+const brl = v => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+/* altura da barra fixa */
+const bar = document.querySelector(".bar");
+const setBarH = () => document.documentElement.style.setProperty("--bar-h", bar.offsetHeight + "px");
+setBarH(); try { new ResizeObserver(setBarH).observe(bar); } catch (_) { addEventListener("resize", setBarH); }
+
+/* redes */
+document.querySelectorAll("[data-socials]").forEach(nav => {
+  nav.innerHTML = Object.keys(ICONS).map(k => {
+    const url = LOJA[k];
+    return `<a href="${url ? esc(url) : "#"}" target="_blank" rel="noopener" aria-label="${NOMES_REDE[k]}" title="${NOMES_REDE[k]}"${url ? "" : ' aria-disabled="true"'}>${ICONS[k]}</a>`;
+  }).join("");
+});
+$("#copy").textContent = `© ${new Date().getFullYear()} ${LOJA.nome}. Todos os direitos reservados.`;
+const publicos = EBOOKS.filter(e => e.c !== "adulto");
+$("#acervo").textContent = `Acervo · ${EBOOKS.length} ebooks`;
+$("#fan").innerHTML = ["057","083","017","043","034"].map(id => EBOOKS.find(e => e.id === id)).filter(Boolean)
+  .map(e => `<img src="${coverSrc(e)}" alt="">`).join("");
+
+/* chips */
+function renderChips() {
+  const chips = [["todas", "Todas", publicos.length]].concat(ORDER.map(k => [k, CATS[k][0], byCat[k].length]));
+  $("#cats").innerHTML = chips.map(([k, n, c]) =>
+    `<button class="chip${k === "adulto" ? " adult" : ""}" data-cat="${k}" aria-pressed="${state.cat === k}">${esc(n)} <small>${c}</small></button>`).join("");
+}
+
+function card(e) {
+  const picked = state.combo && state.combo.picks.includes(e.id);
+  const pick = state.combo ? `<span class="pick" aria-hidden="true">${picked ? "✓" : "+"}</span>` : "";
+  return `<a class="card${picked ? " picked" : ""}" href="#" data-id="${e.id}"${state.combo ? ` aria-pressed="${!!picked}"` : ""}>
+    <div class="cover"><img src="${coverSrc(e)}" alt="Capa: ${esc(e.t)}" loading="lazy" decoding="async">${e.c === "adulto" ? '<span class="tag18">+18</span>' : ""}${pick}</div>
+    <div class="meta"><span>Nº ${e.id}</span><span>${e.p} págs</span></div>
+    <h3>${esc(e.t)}</h3>
+    <div class="card-price">${brl(PRECO_EBOOK)}</div>
+  </a>`;
+}
+
+function render() {
+  renderChips();
+  const main = $("#main");
+  if (state.cat !== "todas") {
+    const [nome, sub] = CATS[state.cat];
+    const list = byCat[state.cat];
+    main.innerHTML = `<div class="results-head"><h2>${esc(nome)}</h2><span>${list.length} ebooks · ${esc(sub)}</span></div><div class="grid">${list.map(card).join("")}</div>`;
+    return;
+  }
+  main.innerHTML = ORDER.filter(k => k !== "adulto").map(k => {
+    const [nome, sub] = CATS[k];
+    return `<section class="shelf" aria-labelledby="h-${k}">
+      <div class="shelf-head"><div><h2 id="h-${k}">${esc(nome)}</h2><p>${esc(sub)}</p></div>
+      <button class="see" data-cat="${k}">Ver os ${byCat[k].length} →</button></div>
+      <div class="row">${byCat[k].map(card).join("")}</div></section>`;
+  }).join("");
+}
+
+/* camadas: ficha do ebook e aviso +18 */
+const layer = $("#layer");
+let lastFocus = null;
+function openLayer(html) {
+  lastFocus = document.activeElement;
+  layer.innerHTML = `<div class="sheet-bg" data-close>${html}</div>`;
+  layer.hidden = false; document.body.style.overflow = "hidden";
+  (layer.querySelector("[data-focus]") || layer.querySelector("button,a"))?.focus();
+}
+function closeLayer() {
+  if (!adultOk && location.hash === "#adulto") setHash("");
+  layer.hidden = true; layer.innerHTML = ""; document.body.style.overflow = ""; lastFocus?.focus?.(); }
+
+function openBook(id) {
+  const e = EBOOKS.find(x => x.id === id); if (!e) return;
+  if (e.c === "adulto" && !adultOk) return askAge(() => openBook(id));
+  const link = (LINKS_KIWIFY[e.id] || "").trim();
+  const btn = link
+    ? `<a class="buy" href="${esc(link)}" target="_blank" rel="noopener" data-focus>Quero este ebook <span aria-hidden="true">→</span></a><div class="safe">Compra segura pela Kiwify · acesso imediato</div>`
+    : `<span class="buy" aria-disabled="true">Em breve</span><div class="safe">Este ebook chega à loja nos próximos dias.</div>`;
+  openLayer(`<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="st">
+    <button class="close" data-close aria-label="Fechar">×</button>
+    <div class="big"><img src="${coverSrc(e)}" alt="Capa: ${esc(e.t)}"></div>
+    <div class="info">
+      <div class="eyebrow">${esc(CATS[e.c][0])}</div>
+      <h2 id="st">${esc(e.t)}</h2>
+      <p>${esc(e.d)}</p>
+      <div class="price-line"><b>${brl(PRECO_EBOOK)}</b><span>ou a partir de ${brl(OFERTAS.combo5.preco / OFERTAS.combo5.qtd)} cada nos combos</span></div>
+      <dl class="ficha"><dt>Nº</dt><dd>${e.id}</dd><dt>Páginas</dt><dd>${e.p}</dd><dt>Formato</dt><dd>Ebook em PDF</dd><dt>Entrega</dt><dd>Imediata, por e-mail</dd></dl>
+      ${btn}
+    </div></div>`);
+}
+
+function askAge(then) {
+  openLayer(`<div class="gate" role="dialog" aria-modal="true" aria-labelledby="gt">
+    <b>+18</b><h2 id="gt">Conteúdo para maiores de idade</h2>
+    <p>Esta seção reúne ebooks sobre sexualidade adulta. Confirme que você tem 18 anos ou mais para continuar.</p>
+    <div class="btns"><button class="ghost" data-close>Voltar</button><button class="buy" id="ok18" data-focus>Tenho 18 anos ou mais</button></div></div>`);
+  $("#ok18").onclick = () => { adultOk = true; try { sessionStorage.setItem("estante18", "1"); } catch (_) {} closeLayer(); then(); };
+}
+
+function setCat(k, fromHash) {
+  if (k === "adulto" && !adultOk) return askAge(() => setCat("adulto"));
+  state.cat = k;
+  if (!fromHash) { const h = k === "todas" ? "" : k; if (location.hash.slice(1) !== h) setHash(h); }
+  render();
+  if (!fromHash) $("#main").scrollIntoView({ block: "start", behavior: "smooth" });
+}
+
+/* ofertas */
+function renderOffers() {
+  $("#offers-sub").textContent = `Cada ebook sai por ${brl(PRECO_EBOOK)}. Nos combos você escolhe os títulos que quiser e economiza.`;
+  const combo = (key, nome) => {
+    const o = OFERTAS[key], cheio = o.qtd * PRECO_EBOOK;
+    return `<article class="offer"><div class="kind">Combo</div><h3>${nome}</h3>
+      <div class="val"><b>${brl(o.preco)}</b><s>${brl(cheio)}</s></div>
+      <span class="save">Economize ${brl(cheio - o.preco)}</span>
+      <p class="note">Você escolhe ${o.qtd} ebooks da estante. Sai por ${brl(o.preco / o.qtd)} cada.</p>
+      <button class="buy" data-combo="${key}">Montar meu combo de ${o.qtd}</button></article>`;
+  };
+  const a = OFERTAS.assinatura, total = EBOOKS.length;
+  const assinar = a.link
+    ? `<a class="buy" href="${esc(a.link)}" target="_blank" rel="noopener">Assinar o acesso total</a>`
+    : `<span class="buy" aria-disabled="true">Em breve</span>`;
+  $("#offers").innerHTML = combo("combo5", "Escolha 5 ebooks") + combo("combo10", "Escolha 10 ebooks") +
+    `<article class="offer total"><div class="kind">Assinatura</div><h3>Acesso total</h3>
+      <div class="val"><b>${brl(a.preco)}</b><small>/mês</small></div>
+      <p class="note">Todos os ${total} ebooks da estante, enquanto a assinatura estiver ativa.</p>
+      ${assinar}</article>`;
+}
+
+/* modo combo */
+let toastT;
+function toast(msg) { const el = $("#toast"); el.textContent = msg; el.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => el.hidden = true, 2600); }
+function startCombo(key) {
+  state.combo = { key, qtd: OFERTAS[key].qtd, picks: [] };
+  document.body.classList.add("combo-on");
+  render(); renderBar();
+  $("#main").scrollIntoView({ block: "start", behavior: "smooth" });
+  toast(`Toque nos ebooks para escolher os seus ${OFERTAS[key].qtd}.`);
+}
+function endCombo() {
+  state.combo = null; document.body.classList.remove("combo-on");
+  $("#cbar").hidden = true; render();
+}
+function togglePick(id) {
+  const c = state.combo, i = c.picks.indexOf(id);
+  if (i >= 0) c.picks.splice(i, 1);
+  else if (c.picks.length >= c.qtd) return toast(`Seu combo já tem ${c.qtd} ebooks. Toque num escolhido para trocar.`);
+  else c.picks.push(id);
+  const on = c.picks.includes(id);
+  document.querySelectorAll(`.card[data-id="${id}"]`).forEach(el => {
+    el.classList.toggle("picked", on); el.setAttribute("aria-pressed", on);
+    const p = el.querySelector(".pick"); if (p) p.textContent = on ? "✓" : "+";
+  });
+  renderBar();
+  if (on && c.picks.length === c.qtd) toast("Combo completo! Toque em Finalizar.");
+}
+function renderBar() {
+  const c = state.combo, bar = $("#cbar"); if (!c) return;
+  const n = c.picks.length, o = OFERTAS[c.key];
+  bar.innerHTML = `<div class="wrap">
+    <div class="what"><b>Combo ${c.qtd} ebooks · ${brl(o.preco)}</b><span>${n} de ${c.qtd} escolhidos</span>
+      <div class="dots" aria-hidden="true">${Array.from({ length: c.qtd }, (_, i) => `<i class="${i < n ? "on" : ""}"></i>`).join("")}</div></div>
+    <button class="ghost" id="cb-cancel">Cancelar</button>
+    <button class="buy" id="cb-done"${n < c.qtd ? " disabled" : ""}>Finalizar</button></div>`;
+  bar.hidden = false;
+  $("#cb-cancel").onclick = endCombo;
+  $("#cb-done").onclick = openSummary;
+}
+function openSummary() {
+  const c = state.combo, o = OFERTAS[c.key];
+  const picks = c.picks.map(id => EBOOKS.find(e => e.id === id));
+  const lista = picks.map(e => `Nº ${e.id} – ${e.t}`).join("\n");
+  const msg = `Olá! Quero o Combo ${c.qtd} ebooks por ${brl(o.preco)}.\n\nMinha escolha:\n${lista}`;
+  const wa = WHATSAPP ? `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}` : "";
+  const src = "combo" + c.qtd + "-" + c.picks.join("-");
+  const pay = o.link ? o.link + (o.link.includes("?") ? "&" : "?") + "src=" + encodeURIComponent(src) : "";
+  openLayer(`<div class="summary" role="dialog" aria-modal="true" aria-labelledby="sm">
+    <button class="close" data-close aria-label="Fechar">×</button>
+    <div class="eyebrow">Seu combo · ${brl(o.preco)}</div>
+    <h2 id="sm">Seus ${c.qtd} ebooks</h2>
+    <ol>${picks.map(e => `<li><span>Nº ${e.id}</span>${esc(e.t)}</li>`).join("")}</ol>
+    <div class="step"><small>Passo 1</small>${wa
+      ? `<a class="buy wa" href="${esc(wa)}" target="_blank" rel="noopener" data-focus>Enviar minha escolha no WhatsApp</a>`
+      : `<span class="buy" aria-disabled="true">WhatsApp em breve</span>`}</div>
+    <div class="step"><small>Passo 2</small>${pay
+      ? `<a class="buy" href="${esc(pay)}" target="_blank" rel="noopener">Pagar ${brl(o.preco)} na Kiwify</a>`
+      : `<span class="buy" aria-disabled="true">Pagamento em breve</span>`}</div>
+    <p>Assim que o pagamento for confirmado, você recebe os ${c.qtd} ebooks que escolheu. Quer trocar algum? Feche esta janela e toque no ebook.</p>
+  </div>`);
+}
+
+/* eventos */
+document.addEventListener("click", ev => {
+  const c = ev.target.closest("[data-cat]"); if (c) return setCat(c.dataset.cat);
+  const k = ev.target.closest("[data-combo]"); if (k) return startCombo(k.dataset.combo);
+  const b = ev.target.closest(".card"); if (b) { ev.preventDefault(); return state.combo ? togglePick(b.dataset.id) : openBook(b.dataset.id); }
+  if (ev.target.matches("[data-close]")) closeLayer();
+});
+document.addEventListener("keydown", ev => {
+  if (layer.hidden) return;
+  if (ev.key === "Escape") return closeLayer();
+  if (ev.key === "Tab") {
+    const f = [...layer.querySelectorAll("a[href],button:not([disabled])")]; if (!f.length) return;
+    const first = f[0], last = f[f.length - 1];
+    if (ev.shiftKey && document.activeElement === first) { ev.preventDefault(); last.focus(); }
+    else if (!ev.shiftKey && document.activeElement === last) { ev.preventDefault(); first.focus(); }
+  }
+});
+$("#home").addEventListener("click", ev => { ev.preventDefault(); setCat("todas"); window.scrollTo({ top: 0 }); });
+
+renderOffers();
+function fromHash() { const h = location.hash.slice(1); setCat(CATS[h] ? h : "todas", true); }
+window.addEventListener("hashchange", fromHash);
+fromHash();
+</script>
+
+</body>
+</html>
