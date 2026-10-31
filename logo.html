@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Logo Estante Dela</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#ECB9CB;display:grid;place-items:center;min-height:100vh}canvas{width:min(90vw,540px);height:auto;border-radius:50%}</style>
+</head><body><canvas id="c" width="1080" height="1080"></canvas>
+<script>
+async function draw(){
+  await document.fonts.load('300 200px "Cormorant Garamond"');
+  await document.fonts.load('italic 300 200px "Cormorant Garamond"');
+  await document.fonts.load('600 40px "Nunito Sans"');
+  const c=document.getElementById('c'),x=c.getContext('2d'),W=1080,C=W/2;
+  const g=x.createRadialGradient(C,C*0.8,80,C,C,W*0.75);
+  g.addColorStop(0,'#C2386F');g.addColorStop(0.55,'#9E2558');g.addColorStop(1,'#6E173E');
+  x.fillStyle=g;x.fillRect(0,0,W,W);
+  // fine inner ring
+  x.strokeStyle='rgba(255,226,236,.55)';x.lineWidth=3;x.beginPath();x.arc(C,C,430,0,Math.PI*2);x.stroke();
+  // open book icon
+  x.save();x.translate(C,330);x.strokeStyle='#FFE6EF';x.lineWidth=7;x.lineCap='round';x.lineJoin='round';
+  x.beginPath();x.moveTo(0,10);x.bezierCurveTo(-40,-20,-95,-22,-135,-6);x.lineTo(-135,78);x.bezierCurveTo(-95,62,-40,64,0,94);
+  x.bezierCurveTo(40,64,95,62,135,78);x.lineTo(135,-6);x.bezierCurveTo(95,-22,40,-20,0,10);x.lineTo(0,94);x.stroke();
+  x.lineWidth=4;[[-110,18,-28,38],[-110,42,-28,60],[28,38,110,18],[28,60,110,42]].forEach(([a,b,cc,d])=>{x.beginPath();x.moveTo(a,b);x.quadraticCurveTo((a+cc)/2,(b+d)/2-10,cc,d);x.stroke();});
+  x.restore();
+  x.fillStyle='#FFF4F8';x.textAlign='center';x.textBaseline='alphabetic';
+  x.font='300 168px "Cormorant Garamond"';x.fillText('Estante',C,612);
+  x.font='italic 300 176px "Cormorant Garamond"';x.fillText('Dela',C,756);
+  x.font='600 30px "Nunito Sans"';x.fillStyle='#FFD3E2';
+  const t='E B O O K S';x.fillText(t,C,836);
+  window.__logo=c.toDataURL('image/jpeg',0.92);document.title='pronto';
+}
+draw();
+</script></body></html>
