@@ -1,3 +1,5 @@
 User-agent: *
 Allow: /
 Sitemap: https://betinho-da-montanha-0364.github.io/estante-dela/sitemap.xml
+
+Disallow: /social/relay.html
